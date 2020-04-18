@@ -1,13 +1,28 @@
 import React, { Component } from 'react'
-import { Input, Menu, Segment } from 'semantic-ui-react'
+import { Menu, Segment } from 'semantic-ui-react'
+import axios from 'axios'
 import Main from './Main'
 import Gallery from './Gallery'
 import Game from './Game'
 
 export default class MenuExampleTabularOnTop extends Component {
-   state = { activeItem: 'main' }
+   constructor(){
+      super()
+      this.state = { 
+         activeItem: 'main',
+         data: 'Test',
+         picture: '',
+      }
+
+   }
 
    handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+
+   componentDidMount(){
+      axios.get('/randompic').then(({data}) => {
+         this.setState({picture: data})
+      })
+   }
 
    render() {
       const { activeItem } = this.state
@@ -33,7 +48,7 @@ export default class MenuExampleTabularOnTop extends Component {
 
             <Segment attached='bottom'>
                {this.state.activeItem === "gallery"? <Gallery />:null}
-               {this.state.activeItem === "main"? <Main />:null}
+               {this.state.activeItem === "main"? <Main data={this.state.data} randomPicture={this.state.picture}/>:null}
                {this.state.activeItem === "game"? <Game />:null}
             </Segment>
          </div>
