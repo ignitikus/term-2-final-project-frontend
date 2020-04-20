@@ -16,6 +16,10 @@ export default class Main extends Component{
    pictureLoaded = () => {
       this.setState({loaded: true, visibility: 'visible'})
    }
+
+   handleClick = ()=>{
+      console.log('Click')
+   }
    
    
    render() {
@@ -37,7 +41,9 @@ export default class Main extends Component{
                         className={this.state.visibility}
                         onLoad={this.pictureLoaded} 
                         src={picture.urls.raw} 
-                        style={{maxHeight: '85vh', maxWidth: '90vw'}}/>
+                        style={{maxHeight: '80vh', maxWidth: '90vw'}}
+                        onClick={this.handleClick}
+                        />
                   </div>
                </div>
                } 

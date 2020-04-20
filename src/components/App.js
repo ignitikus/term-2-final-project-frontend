@@ -4,8 +4,9 @@ import axios from 'axios'
 import Main from './Main'
 import Gallery from './Gallery'
 import Game from './Game'
+import Footer  from './Footer'
 
-export default class MenuExampleTabularOnTop extends Component {
+export default class App extends Component {
    constructor(){
       super()
       this.state = { 
@@ -51,6 +52,7 @@ export default class MenuExampleTabularOnTop extends Component {
                {this.state.activeItem === "main"? <Main data={this.state.data} randomPicture={this.state.picture}/>:null}
                {this.state.activeItem === "game"? <Game />:null}
             </Segment>
+            <Footer />
          </div>
       )
    }
