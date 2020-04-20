@@ -1,0 +1,7 @@
+.ui.inverted.green.button.yay-button:hover{
+   transform: scale(1.3);
+}
+
+.ui.inverted.red.button.nay-button:hover{
+   transform: scale(0.7);
+}

@@ -19,14 +19,19 @@ export default class App extends Component {
 
    handleItemClick = (e, { name }) => this.setState({ activeItem: name })
 
-   componentDidMount(){
+   getRandomPic = () => {
       axios.get('/randompic').then(({data}) => {
          this.setState({picture: data})
       })
    }
+   
+
+   componentDidMount(){
+      this.getRandomPic()
+   }
 
    render() {
-      const { activeItem } = this.state
+      const { activeItem, data, picture } = this.state
       return (
          <div>
             <Menu attached='top' tabular style={{justifyContent:'center'}}>
@@ -48,9 +53,9 @@ export default class App extends Component {
             </Menu>
 
             <Segment attached='bottom'>
-               {this.state.activeItem === "gallery"? <Gallery />:null}
-               {this.state.activeItem === "main"? <Main data={this.state.data} randomPicture={this.state.picture}/>:null}
-               {this.state.activeItem === "game"? <Game />:null}
+               {activeItem === "gallery"? <Gallery />:null}
+               {activeItem === "main"? <Main data={data} randomPicture={picture} getRandomPic={this.getRandomPic}/>:null}
+               {activeItem === "game"? <Game />:null}
             </Segment>
             <Footer />
          </div>
