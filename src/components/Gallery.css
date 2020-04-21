@@ -10,22 +10,20 @@
    justify-content: center;
 }
 
-.ui.grid>.row>.column>img{
+.ui.grid>.row>.column>div>img{
    max-width: 300px;
    max-height: 200px;
-   margin: 2%;
-   outline: 2px solid lightgrey
+   margin: 1rem;
 }
 
-.ui.grid>.row>.column>.yayImage:hover{
-   transform: scale(3) translate(20%, 25%);
-   transition: transform 0.2s 0.1s ease-out;
+.ui.grid>.row>.column>div>.yayImage:hover{
+   transform: scale(2) translate(20%, 25%);
+   transition: transform 0.5s 0.3s ease-out;
    z-index: 1000;
-   outline: 2px solid green
 }
-.ui.grid>.row>.column>.nayImage:hover{
-   transform: scale(3) translate(-20%, 25%);
-   transition: transform 0.2s 0.1s ease-out;
+
+.ui.grid>.row>.column>div>.nayImage:hover{
+   transform: scale(2) translate(-20%, 25%);
+   transition: transform 0.5s 0.3s ease-out;
    z-index: 1000;
-   outline: 2px solid green
 }
