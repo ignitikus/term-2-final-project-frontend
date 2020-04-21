@@ -59,7 +59,7 @@ export default class Main extends Component{
                         disabled={open}
                         className={visibility}
                         onLoad={this.pictureLoaded} 
-                        src={picture.urls.raw} 
+                        src={picture.urls.full} 
                         style={{maxHeight: '80vh', maxWidth: '90vw'}}
                         onClick={this.handleOpen}
                         />

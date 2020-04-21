@@ -1,5 +1,5 @@
 import React, {Component} from 'react'
-import { Image, Segment, Grid, Divider, Icon, Header} from 'semantic-ui-react'
+import { Segment, Grid, Divider, Icon, Header} from 'semantic-ui-react'
 import { DragDropContext, Droppable, Draggable } from 'react-beautiful-dnd'
 
 export default class Gallery extends Component{
@@ -20,8 +20,9 @@ export default class Gallery extends Component{
       return (
          <Segment placeholder>
             <Grid columns={2} stackable textAlign='center'>
-               <Divider vertical><Icon name='arrows alternate horizontal' style={{fontSize: '3.5rem'}}/></Divider>
-
+               <Divider vertical>
+                  <Icon name='arrows alternate horizontal' style={{fontSize: '3.5rem'}}/>
+               </Divider>
                <Grid.Row verticalAlign='middle'>
                <Grid.Column>
                {!this.state.yay &&

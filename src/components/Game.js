@@ -25,7 +25,7 @@ export default class Nav extends Component{
             <Segment disabled={this.state.open}>
                <Puzzle
                      onDone={this.handleGameFinish}
-                     size = { 600 }
+                     size = { 650 }
                      level = { 3 }
                      update={this.state.update}
                      image={this.props.gamePicture.full}
