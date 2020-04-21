@@ -5,7 +5,7 @@ module.exports = {
          status: picStatus,
          description: props.randomPicture.picture.description,
          urls: {
-            raw: props.randomPicture.picture.urls.raw,
+            thumb: props.randomPicture.picture.urls.thumb,
             full: props.randomPicture.picture.urls.full,
          }
       }

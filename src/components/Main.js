@@ -48,7 +48,7 @@ export default class Main extends Component{
                {picture === undefined
                ?  <Spinner /> : 
                <div style={{display:'flex',flexDirection:'column', alignItems:'center'}}>
-                  <h2>{picture.description}</h2>
+                  <h2 style={{textAlign:'center'}}>{picture.description}</h2>
                   <div>
                      {!loaded &&
                      <div>
@@ -65,10 +65,13 @@ export default class Main extends Component{
                         />
                   <QuestionModal 
                      open={open}
+                     question={'Do you like the picture?'}
+                     option1={'YAY'}
+                     option2={'NAY'}
                      handleOpen={this.handleOpen} 
                      handleClose={this.handleClose}
-                     handleYay = {this.handleYay}
-                     handleNay = {this.handleNay}
+                     handleOption1 = {this.handleYay}
+                     handleOption2 = {this.handleNay}
                   /> 
                   </div>
                </div>

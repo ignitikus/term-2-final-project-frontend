@@ -10,9 +10,11 @@ export default class App extends Component {
    constructor(){
       super()
       this.state = { 
-         activeItem: 'main',
+         activeItem: 'game',
          data: 'Test',
          picture: '',
+         gamePicture: '',
+         gallery:[]
       }
 
    }
@@ -21,17 +23,25 @@ export default class App extends Component {
 
    getRandomPic = () => {
       axios.get('/randompic').then(({data}) => {
-         this.setState({picture: data})
+         this.setState({picture: data, gamePicture: {...data.picture.urls}})
       })
    }
+
+   getGallery = () => {
+      axios.get('/gallery').then(({data}) => {
+         this.setState({gallery: [...data]})
+      })
+   }
+   
    
 
    componentDidMount(){
       this.getRandomPic()
+      this.getGallery()
    }
 
    render() {
-      const { activeItem, data, picture } = this.state
+      const { activeItem, data, picture, gallery } = this.state
       return (
          <div>
             <Menu attached='top' tabular style={{justifyContent:'center'}}>
@@ -53,9 +63,9 @@ export default class App extends Component {
             </Menu>
 
             <Segment attached='bottom'>
-               {activeItem === "gallery"? <Gallery />:null}
+               {activeItem === "gallery"? <Gallery gallery={gallery}/>:null}
                {activeItem === "main"? <Main data={data} randomPicture={picture} getRandomPic={this.getRandomPic}/>:null}
-               {activeItem === "game"? <Game />:null}
+               {activeItem === "game"? <Game gamePicture={this.state.gamePicture}/>:null}
             </Segment>
             <Footer />
          </div>
