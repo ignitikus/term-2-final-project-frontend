@@ -11,7 +11,7 @@ export default class App extends Component {
    constructor(){
       super()
       this.state = { 
-         activeItem: 'test',
+         activeItem: 'gallery',
          data: 'Test',
          picture: '',
          gamePicture: '',
@@ -28,17 +28,8 @@ export default class App extends Component {
       })
    }
 
-   getGallery = () => {
-      axios.get('/gallery').then(({data}) => {
-         this.setState({gallery: [...data]})
-      })
-   }
-   
-   
-
    componentDidMount(){
       this.getRandomPic()
-      this.getGallery()
    }
 
    render() {
@@ -69,10 +60,10 @@ export default class App extends Component {
             </Menu>
 
             <Segment attached='bottom'>
-               {activeItem === "gallery"? <Gallery gallery={gallery}/>:null}
+               {activeItem === "gallery"? <Gallery />:null}
                {activeItem === "main"? <Main data={data} randomPicture={picture} getRandomPic={this.getRandomPic}/>:null}
                {activeItem === "game"? <Game gamePicture={this.state.gamePicture}/>:null}
-               {activeItem === "test"? <QuoteApp gallery={gallery}/>:null}
+               {activeItem === "test"? <QuoteApp />:null}
             </Segment>
             <Footer />
          </div>

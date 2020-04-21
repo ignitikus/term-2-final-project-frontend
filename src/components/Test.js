@@ -1,19 +1,29 @@
 import React, { Component } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd";
 import { Image, Segment, Grid, Divider, Icon, Header} from 'semantic-ui-react'
+import axios from 'axios'
+import axiosConfig from './utils/configs/axiosConfig'
 
-
-const getItems = count =>
-   Array.from({ length: count }, (v, k) => k).map(k => ({
-      id: `item-${k}`,
-      content: `item ${k}`,
-}));
 
 // a little function to help us with reordering the result
 const reorder = (list, startIndex, endIndex) => {
    const result = Array.from(list);
    const [removed] = result.splice(startIndex, 1);
    result.splice(endIndex, 0, removed);
+
+   return result;
+};
+
+const move = (source, destination, droppableSource, droppableDestination) => {
+   const sourceClone = Array.from(source);
+   const destClone = Array.from(destination);
+   const [removed] = sourceClone.splice(droppableSource.index, 1);
+
+   destClone.splice(droppableDestination.index, 0, removed);
+
+   const result = {};
+   result[droppableSource.droppableId] = sourceClone;
+   result[droppableDestination.droppableId] = destClone;
 
    return result;
 };
@@ -43,53 +53,79 @@ const getListStyle = isDraggingOver => ({
 });
 
 
-export default class App extends Component {
+export default class Test extends Component {
    constructor(props) {
       super(props);
       this.state = {
-         test: [{
-            urls: {
-               full: 'https://images.unsplash.com/photo-1542044896530-05d85be9b11a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&w=1000&q=80'
-            },
-            _id: 'test'
-         }],
-         liked: [],
-         disliked: []
+         items: [],
+         selected: []
       };
    }
 
-   onDragEnd = (result) =>{
+   id2List = {
+      droppableYay: 'items',
+      droppableNay: 'selected'
+   }
+
+   getList = id => this.state[this.id2List[id]];
+
+   onDragEnd = result => {
       const { source, destination } = result;
+
       // dropped outside the list
-      if (!result.destination) {
+      if (!destination) {
          return;
       }
 
-      const items = reorder(
-         this.state.items,
-         result.source.index,
-         result.destination.index
-      );
+      if (source.droppableId === destination.droppableId) {
+         const items = reorder(
+               this.getList(source.droppableId),
+               source.index,
+               destination.index
+         );
 
-      this.setState({
-         items,
-      });
+         let state = { items };
+
+         if (source.droppableId === 'droppable2') {
+               state = { selected: items };
+         }
+
+         this.setState(state);
+      } else {
+         const result = move(
+               this.getList(source.droppableId),
+               this.getList(destination.droppableId),
+               source,
+               destination
+         );
+
+         this.setState({
+               items: result.droppable,
+               selected: result.droppable2
+         });
+      }
+   };
+
+   getGallery = () => {
+      axios.get('/gallery').then(({data}) => {
+         this.setState({
+            items: [...data.filter(pic=>pic.status)], 
+            selected: [...data.filter(pic=>!pic.status)]})
+      })
+   }
+
+   updateStatus = (id, status)=>{
+      axios.put('updatestatus', {id ,status}, axiosConfig)
+      this.getGallery()
    }
 
    componentDidMount(){
-      this.setState(state => {
-         const liked = [...this.props.gallery.filter(pic=> pic.status)]
-
-         return {
-            liked
-         }
-      })
+      this.getGallery()
    }
+
    // Normally you would want to split things out into separate components.
    // But in this example everything is just done in one place for simplicity
    render() {
-      console.log(this.state.liked)
-      console.log(this.state.disliked)
       return (
          <DragDropContext onDragEnd={this.onDragEnd}>
             <Segment placeholder>
@@ -107,7 +143,7 @@ export default class App extends Component {
                   {...provided.droppableProps}
                   >
 
-                  {this.props.gallery.filter(pic=> pic.status).map(({urls, _id}, index) => (
+                  {this.state.items.filter(pic=> pic.status).map(({status, urls, _id}, index) => (
                      <Draggable key={_id} draggableId={_id} index={index}>
                         {(provided, snapshot) => (
                         <div
@@ -120,7 +156,9 @@ export default class App extends Component {
                            )}
                         >
                            <p>Image: {index}</p>
-                           <Image style={{maxWidth: '100px', maxHeight: '100px'}} src={urls.full}/>
+                           <Image onClick={() => {
+                              this.updateStatus(_id, status)
+                           }} style={{maxWidth: '100px', maxHeight: '100px'}} src={urls.full}/>
                         </div>
                         )}
                      </Draggable>
@@ -141,7 +179,7 @@ export default class App extends Component {
                   {...provided.droppableProps}
                   >
 
-                  {this.props.gallery.filter(pic=> !pic.status).map(({urls, _id}, index) => (
+                  {this.state.selected.filter(pic=> !pic.status).map(({status, urls, _id}, index) => (
                      <Draggable key={_id} draggableId={_id} index={index}>
                         {(provided, snapshot) => (
                         <div
@@ -154,7 +192,9 @@ export default class App extends Component {
                            )}
                         >
                            <p>Image: {index}</p>
-                           <Image style={{maxWidth: '100px', maxHeight: '100px'}} src={urls.full}/>
+                           <Image onClick={() => {
+                              this.updateStatus(_id, status)
+                           }} style={{maxWidth: '100px', maxHeight: '100px'}} src={urls.full}/>
                         </div>
                         )}
                      </Draggable>
