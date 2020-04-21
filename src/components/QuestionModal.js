@@ -1,5 +1,5 @@
 import React from 'react'
-import { Portal, Segment, Header, Button, Icon } from 'semantic-ui-react'
+import { Portal, Segment, Header, Button, Icon, Image } from 'semantic-ui-react'
 import './QuestionModal.css'
 
 export default function QuestionModal(props) {
@@ -19,14 +19,21 @@ export default function QuestionModal(props) {
          >
             <Header style={{fontSize: '2rem'}}>{props.question}</Header>
             <div>
+            {props.currentPicture &&
+               <Image style={{maxWidth: '80vw', maxHeight: '70vh'}} src={props.currentPicture}/>
+            }
                {props.option1 && 
                   <Button 
                      inverted 
                      className='yay-button' 
                      size='massive' 
-                     color='green'
+                     color={props.option1Color}
                      onClick={props.handleOption1}
-                  ><Icon name='thumbs up outline'/>{props.option1}</Button>
+                  >
+                  {props.icon1 &&
+                     <Icon name={props.icon1}/>
+                  }
+                  {props.option1}</Button>
                }
                {props.option2 && 
                   <Button 
@@ -35,7 +42,11 @@ export default function QuestionModal(props) {
                      size='massive' 
                      color='red'
                      onClick={props.handleOption2}
-                  ><Icon name='thumbs down outline'/>{props.option2}</Button>
+                  >
+                  {props.icon2 &&
+                     <Icon name={props.icon2}/>
+                  }
+                  {props.option2}</Button>
                }
             </div>
          </Segment>

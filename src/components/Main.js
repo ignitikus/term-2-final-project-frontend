@@ -1,12 +1,13 @@
 import React, {Component} from 'react'
-import { Image } from 'semantic-ui-react'
 import axios from 'axios'
+import { Image } from 'semantic-ui-react'
+
 import Spinner from './Spinner'
 import QuestionModal from './QuestionModal'
 import axiosConfig from './utils/configs/axiosConfig'
 import {returnCurrentPic} from './utils/helpers/currentPicture'
-import './Main.css'
 
+import './Main.css'
 
 export default class Main extends Component{
    constructor(props) {
@@ -21,19 +22,12 @@ export default class Main extends Component{
    pictureLoaded = () => this.setState({loaded: true, visibility: 'visible'})
    handleClose = () => this.setState({ open: false })
    handleOpen = () => this.setState({ open: true })
-
-   handleYay = () => {
-      const currentPicture = returnCurrentPic(true, this.props)
+   stateReset =() => this.setState({open:false, loaded:false, visibility:'hidden'})
+   
+   handleStatusChange = (status) => {
+      const currentPicture = returnCurrentPic(status, this.props)
       axios.post('/savepicture', currentPicture, axiosConfig).then((picture) => {
-         this.setState({open:false, loaded:false, visibility:'hidden'})
-         this.props.getRandomPic()
-      })
-   }
-
-   handleNay = () => {
-      const currentPicture = returnCurrentPic(false, this.props)
-      axios.post('/savepicture', currentPicture, axiosConfig).then((picture) => {
-         this.setState({open:false, loaded:false, visibility:'hidden'})
+         this.stateReset()
          this.props.getRandomPic()
       })
    }
@@ -67,11 +61,14 @@ export default class Main extends Component{
                      open={open}
                      question={'Do you like the picture?'}
                      option1={'YAY'}
+                     option1Color={'green'}
                      option2={'NAY'}
+                     icon1={'thumbs up outline'}
+                     icon2={'thumbs down outline'}
                      handleOpen={this.handleOpen} 
                      handleClose={this.handleClose}
-                     handleOption1 = {this.handleYay}
-                     handleOption2 = {this.handleNay}
+                     handleOption1 = {() => this.handleStatusChange(true)}
+                     handleOption2 = {() => this.handleStatusChange(false)}
                   /> 
                   </div>
                </div>
