@@ -26,9 +26,15 @@ export default class App extends Component {
       })
    }
 
+   changeGamePic = (urls) => {
+      this.setState({activeItem: 'game', gamePicture: urls})
+   }
+
    componentDidMount(){
       this.getRandomPic()
    }
+
+   
 
    render() {
       const { activeItem, data, picture } = this.state
@@ -53,7 +59,7 @@ export default class App extends Component {
             </Menu>
 
             <Segment attached='bottom'>
-               {activeItem === "gallery"? <Gallery />:null}
+               {activeItem === "gallery"? <Gallery changeGamePic={this.changeGamePic} />:null}
                {activeItem === "main"? <Main data={data} randomPicture={picture} getRandomPic={this.getRandomPic}/>:null}
                {activeItem === "game"? <Game gamePicture={this.state.gamePicture}/>:null}
             </Segment>

@@ -17,11 +17,12 @@ export default class Gallery extends Component{
             status: '',
             action:'',
             urls: {},
+            description: ''
          }
       }
    }
 
-   handleOpen = (id, status, action, urls) => this.setState({ open: true, currentPicture:{id,status,action,urls}})
+   handleOpen = (id, status, action, urls, description) => this.setState({ open: true, currentPicture:{id,status,action,urls, description}})
    handleClose = () => this.setState({ open: false, currentPicture:{id:'',status:'',urls:{}}})
 
    getGallery = () => {
@@ -91,8 +92,8 @@ export default class Gallery extends Component{
                      return (
                         <div key={_id}>
                            <Image onClick={() => {
-                              this.handleOpen(_id, status, 'unlike' ,urls)
-                           }} className='yayImage' src={urls.full} />
+                              this.handleOpen(_id, status, 'unlike', urls, description)
+                           }} className='galleryImage' src={urls.full} />
                         </div>
                      )
                   })}
@@ -109,8 +110,8 @@ export default class Gallery extends Component{
                      return (
                         <div key={_id}>
                            <Image onClick={() => {
-                              this.handleOpen(_id, status, 'undislike' ,urls)
-                           }} className='nayImage' src={urls.full} />
+                              this.handleOpen(_id, status, 'undislike', urls, description)
+                           }} className='galleryImage' src={urls.full} />
                         </div>
                      )
                   })}
@@ -120,20 +121,23 @@ export default class Gallery extends Component{
             <QuestionModal 
                open={open}
                currentPicture={currentPicture.urls.full}
-               question={'Change status or delete'}
+               question={currentPicture.description}
                option1={!currentPicture.status?'Like':'Dislike'}
-               option1Color ={!currentPicture.status? 'green':'red'}
                option2={'Delete?'}
+               option3={'Puzzle?'}
+               option1Size={'huge'}
+               option2Size={'huge'}
+               option3Size={'huge'}
+               option1Color ={!currentPicture.status? 'green':'red'}
                icon1={!currentPicture.status?'thumbs up outline':'thumbs down outline'}
                icon2={'trash alternate outline'}
+               icon3={'gamepad'}
                handleOpen={this.handleOpen} 
                handleClose={this.handleClose}
-               handleOption1 = {() => {
-                  this.handleSelect(currentPicture.id, currentPicture.action)
-               }}
-               handleOption2 = {() => {
-                  this.handleDelete(currentPicture.id)
-               }}
+               handleOption1 = {() => this.handleSelect(currentPicture.id, currentPicture.action)}
+               handleOption2 = {() => this.handleDelete(currentPicture.id)}
+               handleOption3 = {() => this.props.changeGamePic(currentPicture.urls)}
+               
             />
          </Segment>
       )

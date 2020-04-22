@@ -62,7 +62,9 @@ export default class Main extends Component{
                      question={'Do you like the picture?'}
                      option1={'YAY'}
                      option1Color={'green'}
+                     option1Size={'massive'}
                      option2={'NAY'}
+                     option2Size={'massive'}
                      icon1={'thumbs up outline'}
                      icon2={'thumbs down outline'}
                      handleOpen={this.handleOpen} 
