@@ -93,7 +93,7 @@ export default class Gallery extends Component{
                         <div key={_id}>
                            <Image onClick={() => {
                               this.handleOpen(_id, status, 'unlike', urls, description)
-                           }} className='galleryImage' src={urls.full} />
+                           }} className='galleryImage' src={urls.thumb} />
                         </div>
                      )
                   })}
@@ -111,7 +111,7 @@ export default class Gallery extends Component{
                         <div key={_id}>
                            <Image onClick={() => {
                               this.handleOpen(_id, status, 'undislike', urls, description)
-                           }} className='galleryImage' src={urls.full} />
+                           }} className='galleryImage' src={urls.thumb} />
                         </div>
                      )
                   })}
