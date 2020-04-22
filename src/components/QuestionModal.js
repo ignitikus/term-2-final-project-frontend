@@ -20,7 +20,9 @@ export default function QuestionModal(props) {
             <Header style={{fontSize: '2rem', textAlign: 'center'}}>{props.question}</Header>
             <div>
             {props.currentPicture &&
-               <Image style={{maxWidth: '80vw', maxHeight: '70vh', marginBottom: '5px'}} src={props.currentPicture}/>
+               <div style={{display:'flex', width:'100%', justifyContent:'center'}}>
+                  <Image style={{maxWidth: '90vw', maxHeight: '80vh', marginBottom: '5px'}} src={props.currentPicture}/>
+               </div>
             }
                <div style={{display:'flex'}}>
                   {props.option1 && 
@@ -60,7 +62,11 @@ export default function QuestionModal(props) {
                            backgroundImage:'url(https://media3.giphy.com/media/l2Je6sbvJEn1W9OWQ/giphy.gif?cid=ecf05e479851cb845e072fa093583734c962e13e40ea2150&rid=giphy.gif)', 
                            backgroundSize:'cover',
                            backgroundPosition: 'bottom',
-                           marginLeft: 'auto'}}
+                           marginLeft: 'auto',
+                           marginRight: 0,
+                           border: '1px solid grey',
+                           borderRadius: '.28571429rem'
+                           }}
                      >
                      {props.icon3 &&
                         <Icon name={props.icon3}/>
