@@ -17,25 +17,50 @@ export default class LoginModal extends Component{
          login: true,
          error: 'hide-message',
          message: 'Test',
-         color: 'green'
+         color: 'red'
       }
    }
 
+
    handleSubmit = (route) => {
       const user = {...this.state.credentials}
-      axios.post(route, user, axiosConfig).then(({data}) => {
-         if(data.message === 'check credentials'){
-            this.setState({
+      if(!this.state.credentials.email || !this.state.credentials.email){
+         this.setState({
                error: 'show-message', 
-               message: 'Wrong credentials',
-            })
-         }else{
-
-            this.props.addToLocalStorage('user', JSON.stringify({email:data.email, token:data.token, avatar:data.avatar}))
-            this.props.loggedIn(data.message, data.email)
-            this.setState({credentials:{email:'',pass:''}})
-         }
-      })
+               message: 'All inputs must be filled',
+         })
+         setTimeout(() => {
+            this.setState({error: 'hide-message'})
+         }, 2000);
+      }else{
+         axios.post(route, user, axiosConfig).then(({data}) => {
+            if(data.message === 'check credentials'){
+               this.setState({
+                  error: 'show-message', 
+                  message: 'Wrong credentials',
+               })
+            }
+            if(data.message === 'already exists'){
+               this.setState({
+                  error: 'show-message', 
+                  message: 'User already exists',
+                  login: false
+               })
+            }
+            if(data.message === 'Success'){
+               this.setState({
+                  error: 'show-message', 
+                  message: 'Success!',
+                  color: 'green',
+               })
+               setTimeout(() => {
+                  this.props.addToLocalStorage('user', JSON.stringify({email:data.email, token:data.token, avatar:data.avatar}))
+                  this.props.loggedIn(data.message, data.email)
+                  this.setState({credentials:{email:'',pass:''},error:'hide-message', color:'red'})
+               }, 1500);
+            }
+         })
+      }
    }
 
    handleChange = (event) => {
