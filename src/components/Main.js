@@ -5,7 +5,7 @@ import { Image } from 'semantic-ui-react'
 import Spinner from './Spinner'
 import QuestionModal from './QuestionModal'
 import axiosConfig from './utils/configs/axiosConfig'
-import {returnCurrentPic} from './utils/helpers/currentPicture'
+import {returnCurrentPic, getUserFromLS} from './utils/helpers/helperFunctions'
 
 import './Main.css'
 
@@ -26,14 +26,21 @@ export default class Main extends Component{
    
    handleStatusChange = (status) => {
       const currentPicture = returnCurrentPic(status, this.props)
-      axios.post('/savepicture', currentPicture, axiosConfig).then((picture) => {
-         this.stateReset()
-         this.props.getRandomPic()
+      axios.post('/savepicture', {...currentPicture, token: getUserFromLS().token}, axiosConfig).then(({data}) => {
+         if(data.message === 'jwt expired'){
+            console.log('Session expired')
+            this.stateReset()
+            this.props.handleSignOut()
+         }else{
+            this.stateReset()
+            this.props.getRandomPic()
+         }
       })
    }
    
    
    render() {
+      const {email} = this.props
       const {picture} = this.props.randomPicture
       const {open ,loaded, visibility} = this.state
       return(
@@ -55,23 +62,25 @@ export default class Main extends Component{
                         onLoad={this.pictureLoaded} 
                         src={picture.urls.full} 
                         style={{maxHeight: '80vh', maxWidth: '90vw'}}
-                        onClick={this.handleOpen}
+                        onClick={email?this.handleOpen:null}
                         />
-                  <QuestionModal 
-                     open={open}
-                     question={'Do you like the picture?'}
-                     option1={'YAY'}
-                     option1Color={'green'}
-                     option1Size={'massive'}
-                     option2={'NAY'}
-                     option2Size={'massive'}
-                     icon1={'thumbs up outline'}
-                     icon2={'thumbs down outline'}
-                     handleOpen={this.handleOpen} 
-                     handleClose={this.handleClose}
-                     handleOption1 = {() => this.handleStatusChange(true)}
-                     handleOption2 = {() => this.handleStatusChange(false)}
-                  /> 
+                  {this.props.email && 
+                     <QuestionModal 
+                        open={open}
+                        question={'Do you like the picture?'}
+                        option1={'YAY'}
+                        option1Color={'green'}
+                        option1Size={'massive'}
+                        option2={'NAY'}
+                        option2Size={'massive'}
+                        icon1={'thumbs up outline'}
+                        icon2={'thumbs down outline'}
+                        handleOpen={this.handleOpen} 
+                        handleClose={this.handleClose}
+                        handleOption1 = {() => this.handleStatusChange(true)}
+                        handleOption2 = {() => this.handleStatusChange(false)}
+                     /> 
+                  }
                   </div>
                </div>
                } 

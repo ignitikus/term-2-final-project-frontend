@@ -3,6 +3,7 @@ import { Segment, Grid, Divider, Icon, Header, Image} from 'semantic-ui-react'
 import axios from 'axios'
 import axiosConfig from './utils/configs/axiosConfig'
 import QuestionModal from './QuestionModal'
+import {getUserFromLS} from './utils/helpers/helperFunctions'
 import './Gallery.css'
 
 export default class Gallery extends Component{
@@ -26,7 +27,7 @@ export default class Gallery extends Component{
    handleClose = () => this.setState({ open: false, currentPicture:{id:'',status:'',urls:{}}})
 
    getGallery = () => {
-      axios.get('/gallery').then(({data}) => {
+      axios.get(`/gallery/${getUserFromLS().token}`, axiosConfig).then(({data}) => {
          this.setState({
             yay: true,
             nay: true,

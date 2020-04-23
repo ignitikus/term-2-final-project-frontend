@@ -9,6 +9,12 @@ module.exports = {
             full: props.randomPicture.picture.urls.full,
          }
       }
-   }
+   },
+
+   getUserFromLS: () => {
+      return JSON.parse(window.localStorage.getItem('user'))
+   },
    
+   
+
 }

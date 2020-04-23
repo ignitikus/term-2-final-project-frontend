@@ -47,6 +47,12 @@ export default class LoginModal extends Component{
                   login: false
                })
             }
+            if(data.message === 'User not found'){
+               this.setState({
+                  error: 'show-message', 
+                  message: 'User not found',
+               })
+            }
             if(data.message === 'Success'){
                this.setState({
                   error: 'show-message', 
@@ -56,7 +62,7 @@ export default class LoginModal extends Component{
                setTimeout(() => {
                   this.props.addToLocalStorage('user', JSON.stringify({email:data.email, token:data.token, avatar:data.avatar}))
                   this.props.loggedIn(data.message, data.email)
-                  this.setState({credentials:{email:'',pass:''},error:'hide-message', color:'red'})
+                  this.setState({credentials:{email:'',pass:''},error:'hide-message', color:'red',login:true})
                }, 1500);
             }
          })

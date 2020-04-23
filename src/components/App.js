@@ -91,7 +91,7 @@ export default class App extends Component {
 
 
    render() {
-      const { logged, activeItem, data, picture } = this.state
+      const { logged, activeItem, data, picture, email } = this.state
       return (
          <div>
             <Menu attached='top' tabular style={{justifyContent:'center'}}>
@@ -144,7 +144,13 @@ export default class App extends Component {
                <Dimmer active={this.state.openLoginForm} onClickOutside={this.handleLoginClose} page/>
                {activeItem === "gallery"? <Gallery changeGamePic={this.changeGamePic} email={this.state.email}/>:null}
             </Dimmer.Dimmable>
-               {activeItem === "main"? <Main data={data} randomPicture={picture} getRandomPic={this.getRandomPic}/>:null}
+               {activeItem === "main"? <Main 
+                  data={data} 
+                  randomPicture={picture} 
+                  getRandomPic={this.getRandomPic}
+                  email={email}
+                  handleSignOut={this.handleSignOut}
+                  />:null}
                {activeItem === "game"? <Game gamePicture={this.state.gamePicture}/>:null}
             </Segment>
             
