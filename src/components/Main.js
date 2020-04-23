@@ -15,14 +15,14 @@ export default class Main extends Component{
       this.state = {
          open: false,
          loaded: false,
-         visibility: 'hidden',
+         visibility: 'hide',
       }
    }
 
-   pictureLoaded = () => this.setState({loaded: true, visibility: 'visible'})
+   pictureLoaded = () => this.setState({loaded: true, visibility: 'show'})
    handleClose = () => this.setState({ open: false })
    handleOpen = () => this.setState({ open: true })
-   stateReset =() => this.setState({open:false, loaded:false, visibility:'hidden'})
+   stateReset =() => this.setState({open:false, loaded:false, visibility:'hide'})
    
    handleStatusChange = (status) => {
       const currentPicture = returnCurrentPic(status, this.props)

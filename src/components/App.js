@@ -1,19 +1,20 @@
 import React, { Component } from 'react'
-import { Menu, Segment } from 'semantic-ui-react'
+import { Menu, Segment, Button, Icon, Dimmer } from 'semantic-ui-react'
 import Moment from 'react-moment'
 import axios from 'axios'
 import Main from './Main'
 import Gallery from './Gallery'
 import Game from './Game'
 import Footer  from './Footer'
-import Test  from './Test'
+import LoginModal  from './LoginModal'
 
 export default class App extends Component {
    constructor(){
       super()
       this.state = { 
          logged: false,
-         activeItem: 'test',
+         openLoginForm: false,
+         activeItem: 'main',
          picture: '',
          gamePicture: '',
          gallery:[],
@@ -27,6 +28,23 @@ export default class App extends Component {
       this.setState({ activeItem: window.localStorage.getItem('activeItem') })
    }
 
+   handleLoginClick = () => {
+      this.setState({openLoginForm: true})
+   }
+   handleLoginClose = () => {
+      this.setState({openLoginForm: false})
+   }
+
+   handleSignOut = () => {
+      this.clearLocalStorage()
+      this.setState({
+         openLoginForm: false,
+         logged:false,
+         email: '',
+         activeItem: 'main'
+      })
+   }
+   
    getRandomPic = () => {
       axios.get('/randompic').then(({data}) => {
          this.setState({picture: data, gamePicture: {...data.picture.urls}})
@@ -47,7 +65,7 @@ export default class App extends Component {
 
    loggedIn = (message, user) => {
       if(message==='Success'){
-         this.setState({logged: true, email: user})
+         this.setState({logged: true, openLoginForm: false, email: user})
       }
    }
 
@@ -59,9 +77,11 @@ export default class App extends Component {
    }
    
    getActiveTab = () => {
-      this.setState({ activeItem: window.localStorage.getItem('activeItem') })
+      const activeTab = window.localStorage.getItem('activeItem')
+      if(activeTab){
+         this.setState({activeItem: activeTab})
+      }
    }
-   
 
    componentDidMount(){
       this.getActiveTab()
@@ -70,25 +90,38 @@ export default class App extends Component {
    }
 
 
-   
-
    render() {
       const { logged, activeItem, data, picture } = this.state
       return (
          <div>
             <Menu attached='top' tabular style={{justifyContent:'center'}}>
             <Moment format={'hh:mm:ss'} interval={1000} style={{position: 'absolute', left:'0', padding:'.92857143em 1.42857143em', height:''}}/>
+            <div style={{position: 'absolute', right:'0', padding:'.92857143em 1.42857143em', height:''}}>
+               {this.state.email
+               ? <Button 
+                  animated='vertical' 
+                  compact color='blue' 
+                  onClick={this.handleSignOut}
+                  style={{marginTop: '-10px'}}
+                  >
+                  <Button.Content visible>{this.state.email}</Button.Content>
+                  <Button.Content hidden><Icon name='sign-out' />SIGN OUT</Button.Content>
+               </Button>
+               :<Button 
+                  animated='vertical' 
+                  compact color='blue' 
+                  onClick={this.handleLoginClick}
+                  style={{marginTop: '-10px'}}
+                  >
+                  <Button.Content visible>Login/Register</Button.Content>
+                  <Button.Content hidden><Icon name='sign-in' /></Button.Content>
+               </Button>
+               }
+            </div>
             {logged && 
                <Menu.Item
                name='gallery'
                active={activeItem === 'gallery'}
-               onClick={this.handleItemClick}
-               />
-            }
-            {logged && 
-               <Menu.Item
-               name='game'
-               active={activeItem === 'game'}
                onClick={this.handleItemClick}
                />
             }
@@ -97,19 +130,30 @@ export default class App extends Component {
                active={activeItem === 'main'}
                onClick={this.handleItemClick}
                />
+            {logged && 
                <Menu.Item
-               name='test'
-               active={activeItem === 'test'}
+               name='game'
+               active={activeItem === 'game'}
                onClick={this.handleItemClick}
                />
+            }
             </Menu>
 
             <Segment attached='bottom'>
+            <Dimmer.Dimmable blurring dimmed={this.state.openLoginForm}>
+               <Dimmer active={this.state.openLoginForm} onClickOutside={this.handleLoginClose} page/>
                {activeItem === "gallery"? <Gallery changeGamePic={this.changeGamePic} email={this.state.email}/>:null}
+            </Dimmer.Dimmable>
                {activeItem === "main"? <Main data={data} randomPicture={picture} getRandomPic={this.getRandomPic}/>:null}
                {activeItem === "game"? <Game gamePicture={this.state.gamePicture}/>:null}
-               {activeItem === "test"? <Test email={this.state.email} logged={this.state.logged} loggedIn={this.loggedIn} addToLocalStorage={this.addToLocalStorage}/>:null}
             </Segment>
+            
+            <LoginModal 
+               open={this.state.openLoginForm} 
+               handleLoginClose={this.handleLoginClose}
+               addToLocalStorage={this.addToLocalStorage}
+               loggedIn={this.loggedIn}
+               />
             <Footer />
          </div>
       )

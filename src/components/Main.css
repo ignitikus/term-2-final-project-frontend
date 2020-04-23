@@ -1,7 +1,17 @@
-.visible{
+.show{
    visibility: visible;
 }
 
-.hidden{
+.hide{
    visibility: hidden;
+} 
+
+.show-message{
+   visibility: visible;
+   display: initial
+}
+
+.hide-message{
+   visibility: hidden;
+   display:none
 } 
