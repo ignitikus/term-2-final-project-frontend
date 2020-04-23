@@ -5,20 +5,26 @@ import Main from './Main'
 import Gallery from './Gallery'
 import Game from './Game'
 import Footer  from './Footer'
+import Test  from './Test'
 
 export default class App extends Component {
    constructor(){
       super()
       this.state = { 
-         activeItem: 'main',
+         logged: false,
+         activeItem: 'test',
          picture: '',
          gamePicture: '',
-         gallery:[]
+         gallery:[],
+         email: ''
       }
 
    }
 
-   handleItemClick = (e, { name }) => this.setState({ activeItem: name })
+   handleItemClick = (e, { name }) => {
+      this.addToLocalStorage('activeItem', name)
+      this.setState({ activeItem: window.localStorage.getItem('activeItem') })
+   }
 
    getRandomPic = () => {
       axios.get('/randompic').then(({data}) => {
@@ -30,38 +36,77 @@ export default class App extends Component {
       this.setState({activeItem: 'game', gamePicture: urls})
    }
 
+   addToLocalStorage = (key,data) =>{
+      return window.localStorage.setItem(key, data)
+   }
+
+   clearLocalStorage = ()=>{
+      return localStorage.clear()
+   }
+
+   loggedIn = (message, user) => {
+      if(message==='Success'){
+         this.setState({logged: true, email: user})
+      }
+   }
+
+   getEmail = () => {
+      console.log(window.localStorage.getItem('email'))
+      if(window.localStorage.getItem('email')){
+         this.setState({logged:true, email: window.localStorage.getItem('email')})
+      }
+   }
+   
+   getActiveTab = () => {
+      this.setState({ activeItem: window.localStorage.getItem('activeItem') })
+   }
+   
+
    componentDidMount(){
+      this.getActiveTab()
+      this.getEmail()
       this.getRandomPic()
    }
+
 
    
 
    render() {
-      const { activeItem, data, picture } = this.state
+      const { logged, activeItem, data, picture } = this.state
       return (
          <div>
             <Menu attached='top' tabular style={{justifyContent:'center'}}>
+            {logged && 
                <Menu.Item
                name='gallery'
                active={activeItem === 'gallery'}
                onClick={this.handleItemClick}
                />
+            }
+            {logged && 
+               <Menu.Item
+               name='game'
+               active={activeItem === 'game'}
+               onClick={this.handleItemClick}
+               />
+            }
                <Menu.Item
                name='main'
                active={activeItem === 'main'}
                onClick={this.handleItemClick}
                />
                <Menu.Item
-               name='game'
-               active={activeItem === 'game'}
+               name='test'
+               active={activeItem === 'test'}
                onClick={this.handleItemClick}
                />
             </Menu>
 
             <Segment attached='bottom'>
-               {activeItem === "gallery"? <Gallery changeGamePic={this.changeGamePic} />:null}
+               {activeItem === "gallery"? <Gallery changeGamePic={this.changeGamePic} email={this.state.email}/>:null}
                {activeItem === "main"? <Main data={data} randomPicture={picture} getRandomPic={this.getRandomPic}/>:null}
                {activeItem === "game"? <Game gamePicture={this.state.gamePicture}/>:null}
+               {activeItem === "test"? <Test email={this.state.email} logged={this.state.logged} loggedIn={this.loggedIn} addToLocalStorage={this.addToLocalStorage}/>:null}
             </Segment>
             <Footer />
          </div>
