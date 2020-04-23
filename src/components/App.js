@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { Menu, Segment } from 'semantic-ui-react'
+import Moment from 'react-moment'
 import axios from 'axios'
 import Main from './Main'
 import Gallery from './Gallery'
@@ -51,9 +52,9 @@ export default class App extends Component {
    }
 
    getEmail = () => {
-      console.log(window.localStorage.getItem('email'))
-      if(window.localStorage.getItem('email')){
-         this.setState({logged:true, email: window.localStorage.getItem('email')})
+      const user = JSON.parse(window.localStorage.getItem('user'))
+      if(window.localStorage.getItem('user')){
+         this.setState({logged:true, email: user.email})
       }
    }
    
@@ -76,6 +77,7 @@ export default class App extends Component {
       return (
          <div>
             <Menu attached='top' tabular style={{justifyContent:'center'}}>
+            <Moment format={'hh:mm:ss'} interval={1000} style={{position: 'absolute', left:'0', padding:'.92857143em 1.42857143em', height:''}}/>
             {logged && 
                <Menu.Item
                name='gallery'

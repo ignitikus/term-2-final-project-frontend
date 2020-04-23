@@ -23,8 +23,7 @@ export default class Test extends Component {
       event.preventDefault()
       const user = {...this.state.credentials}
       axios.post('/login', user, axiosConfig).then((result) => {
-         this.props.addToLocalStorage('email', result.data.email)
-         this.props.addToLocalStorage('token', result.data.token)
+         this.props.addToLocalStorage('user', JSON.stringify({email:result.data.email, token: result.data.token}))
          this.props.loggedIn(result.data.message, result.data.email)
       })
       event.target.reset()
