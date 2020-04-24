@@ -1,5 +1,5 @@
 import React, { Component } from 'react'
-import { Menu, Segment, Button, Icon, Dimmer } from 'semantic-ui-react'
+import { Menu, Segment, Button, Icon, Dimmer, Label } from 'semantic-ui-react'
 import Moment from 'react-moment'
 import axios from 'axios'
 import Main from './Main'
@@ -18,9 +18,9 @@ export default class App extends Component {
          picture: '',
          gamePicture: '',
          gallery:[],
-         email: ''
+         email: '',
+         numGalleryItems: 0,
       }
-
    }
 
    handleItemClick = (e, { name }) => {
@@ -41,7 +41,7 @@ export default class App extends Component {
          openLoginForm: false,
          logged:false,
          email: '',
-         activeItem: 'main'
+         activeItem: 'main',
       })
    }
    
@@ -83,6 +83,16 @@ export default class App extends Component {
       }
    }
 
+   getGalleryNumber = () => {
+      this.setState({numGalleryItems: this.state.numGalleryItems+1})
+   }
+   resetGalleryNumber = () => {
+      setTimeout(() => {
+         this.setState({numGalleryItems: 0})
+      }, 1500);
+   }
+   
+
    componentDidMount(){
       this.getActiveTab()
       this.getEmail()
@@ -121,6 +131,14 @@ export default class App extends Component {
             {logged && 
                <Menu.Item
                name='gallery'
+               content={
+                  <span>Gallery {
+                     this.state.numGalleryItems===0
+                     ? ''
+                     : <Label circular color='red' size='mini'>
+                        {this.state.numGalleryItems}
+                     </Label>}
+                  </span>}
                active={activeItem === 'gallery'}
                onClick={this.handleItemClick}
                />
@@ -142,7 +160,11 @@ export default class App extends Component {
             <Segment attached='bottom'>
             <Dimmer.Dimmable blurring dimmed={this.state.openLoginForm}>
                <Dimmer active={this.state.openLoginForm} onClickOutside={this.handleLoginClose} page/>
-               {activeItem === "gallery"? <Gallery changeGamePic={this.changeGamePic} email={this.state.email}/>:null}
+               {activeItem === "gallery"? <Gallery 
+               changeGamePic={this.changeGamePic} 
+               email={this.state.email}
+               resetGalleryNumber={this.resetGalleryNumber}/>
+               :null}
             </Dimmer.Dimmable>
                {activeItem === "main"? <Main 
                   data={data} 
@@ -150,6 +172,7 @@ export default class App extends Component {
                   getRandomPic={this.getRandomPic}
                   email={email}
                   handleSignOut={this.handleSignOut}
+                  getGalleryNumber={this.getGalleryNumber}
                   />:null}
                {activeItem === "game"? <Game gamePicture={this.state.gamePicture}/>:null}
             </Segment>

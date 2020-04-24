@@ -69,6 +69,7 @@ export default class Gallery extends Component{
 
    componentDidMount(){
       this.getGallery()
+      this.props.resetGalleryNumber()
    }
 
    render(){

@@ -32,6 +32,7 @@ export default class Main extends Component{
             this.stateReset()
             this.props.handleSignOut()
          }else{
+            this.props.getGalleryNumber()
             this.stateReset()
             this.props.getRandomPic()
          }
@@ -57,6 +58,7 @@ export default class Main extends Component{
                      </div>
                      }
                      <Image 
+                        alt={picture.description}
                         disabled={open}
                         className={visibility}
                         onLoad={this.pictureLoaded} 
