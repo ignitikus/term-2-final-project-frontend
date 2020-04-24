@@ -1,6 +1,6 @@
 import React from 'react'
 import { Portal, Segment, Header, Button, Icon, Image } from 'semantic-ui-react'
-import './QuestionModal.css'
+import './utils/styles/QuestionModal.css'
 
 export default function QuestionModal(props) {
    return (

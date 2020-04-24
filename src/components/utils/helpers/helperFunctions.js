@@ -14,7 +14,8 @@ module.exports = {
    getUserFromLS: () => {
       return JSON.parse(window.localStorage.getItem('user'))
    },
-   
-   
 
+   addToLocalStorage: (key,data) =>{
+      return window.localStorage.setItem(key, data)
+   },
 }

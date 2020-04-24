@@ -1,10 +1,11 @@
 import React, {Component} from 'react'
 import { Segment, Grid, Divider, Icon, Header, Image} from 'semantic-ui-react'
 import axios from 'axios'
-import axiosConfig from './utils/configs/axiosConfig'
+
 import QuestionModal from './QuestionModal'
+import axiosConfig from './utils/configs/axiosConfig'
 import {getUserFromLS} from './utils/helpers/helperFunctions'
-import './Gallery.css'
+import './utils/styles/Gallery.css'
 
 export default class Gallery extends Component{
    constructor(props) {
@@ -41,7 +42,6 @@ export default class Gallery extends Component{
       axios.put('/updatestatus', {id ,status}, axiosConfig)
    }
 
-
    handleSelect = (id, action) => {
       const copyLiked = [...this.state.liked]
       const copyDisliked = [...this.state.disliked]
@@ -75,11 +75,20 @@ export default class Gallery extends Component{
    render(){
       const {liked, disliked, open, currentPicture} = this.state
       return (
-         <Segment placeholder disabled={open}>
-            <Grid columns={2} stackable textAlign='center'>
+         <Segment 
+            placeholder 
+            disabled={open}
+         >
+            <Grid 
+               stackable 
+               columns={2} 
+               textAlign='center'
+            >
                <Divider vertical>
                   <div style={{display:'flex', flexDirection: 'column'}}>
-                     <Icon name='arrows alternate horizontal' style={{fontSize: '3.5rem'}}/>
+                     <Icon 
+                        name='arrows alternate horizontal' 
+                        style={{fontSize: '3.5rem'}}/>
                   </div>
                </Divider>
                <Grid.Row verticalAlign='top'>
@@ -93,9 +102,10 @@ export default class Gallery extends Component{
                   {liked.map(({_id, description, urls, status})=> {
                      return (
                         <div key={_id}>
-                           <Image onClick={() => {
-                              this.handleOpen(_id, status, 'unlike', urls, description)
-                           }} className='galleryImage' src={urls.thumb} />
+                           <Image 
+                              className='galleryImage' src={urls.thumb} 
+                              onClick={() => this.handleOpen(_id, status, 'unlike', urls, description)} 
+                           />
                         </div>
                      )
                   })}
@@ -111,9 +121,10 @@ export default class Gallery extends Component{
                   {disliked.map(({_id, description, urls, status})=> {
                      return (
                         <div key={_id}>
-                           <Image onClick={() => {
-                              this.handleOpen(_id, status, 'undislike', urls, description)
-                           }} className='galleryImage' src={urls.thumb} />
+                           <Image 
+                              className='galleryImage' src={urls.thumb}
+                              onClick={() =>this.handleOpen(_id, status, 'undislike', urls, description)}
+                           />
                         </div>
                      )
                   })}
@@ -124,14 +135,14 @@ export default class Gallery extends Component{
                open={open}
                currentPicture={currentPicture.urls.full}
                question={currentPicture.description}
-               option1={!currentPicture.status?'Like':'Dislike'}
+               option1={!currentPicture.status ?'Like' : 'Dislike'}
                option2={'Delete?'}
                option3={'Puzzle?'}
                option1Size={'huge'}
                option2Size={'huge'}
                option3Size={'huge'}
-               option1Color ={!currentPicture.status? 'green':'red'}
-               icon1={!currentPicture.status?'thumbs up outline':'thumbs down outline'}
+               option1Color ={!currentPicture.status ? 'green':'red'}
+               icon1={!currentPicture.status ? 'thumbs up outline' : 'thumbs down outline'}
                icon2={'trash alternate outline'}
                icon3={'gamepad'}
                handleOpen={this.handleOpen} 

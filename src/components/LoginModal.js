@@ -2,13 +2,14 @@ import React, {Component} from 'react'
 import { Button, Form, Portal, Segment, Header, Message } from 'semantic-ui-react'
 import axios from 'axios'
 import axiosConfig from './utils/configs/axiosConfig.js'
-import './Main.css'
+import { addToLocalStorage } from './utils/helpers/helperFunctions'
+import './utils/styles/Main.css'
 
 
 export default class LoginModal extends Component{
    constructor(props) {
       super(props)
-   
+
       this.state = {
          credentials: {
             email: '',
@@ -21,10 +22,11 @@ export default class LoginModal extends Component{
       }
    }
 
+   handleToggle = (params) => this.setState({login: !this.state.login})
 
    handleSubmit = (route) => {
       const user = {...this.state.credentials}
-      if(!this.state.credentials.email || !this.state.credentials.email){
+      if(!user.email || !user.email){
          this.setState({
                error: 'show-message', 
                message: 'All inputs must be filled',
@@ -60,9 +62,16 @@ export default class LoginModal extends Component{
                   color: 'green',
                })
                setTimeout(() => {
-                  this.props.addToLocalStorage('user', JSON.stringify({email:data.email, token:data.token, avatar:data.avatar}))
+                  addToLocalStorage('user', JSON.stringify({email:data.email, token:data.token, avatar:data.avatar}))
                   this.props.loggedIn(data.message, data.email)
-                  this.setState({credentials:{email:'',pass:''},error:'hide-message', color:'red',login:true})
+                  this.setState({
+                     credentials:{
+                        email:'',
+                        pass:''
+                     },
+                     error:'hide-message', 
+                     color:'red',
+                     login:true})
                }, 1500);
             }
          })
@@ -75,13 +84,13 @@ export default class LoginModal extends Component{
       this.setState({credentials: updatedCredentials})
    }
 
-   handleToggle = (params) => {
-      this.setState({login: !this.state.login})
-   }
-
    render(){
+      const {handleLoginClose, open} = this.props
+      const {login, color, error, message, email, pass} = this.state
       return (
-         <Portal onClose={this.props.handleLoginClose} open={this.props.open}>
+         <Portal 
+            onClose={handleLoginClose} 
+            open={open}>
             <Segment
                style={{
                   position: 'absolute',
@@ -95,9 +104,9 @@ export default class LoginModal extends Component{
                }}
             >
                
-               <Header size='huge'>{this.state.login?'Login':'Register'}</Header>
-               <Message color={this.state.color} className={this.state.error}>{this.state.message}</Message>
-               <Form size='large' onSubmit={this.state.login
+               <Header size='huge'>{login?'Login':'Register'}</Header>
+               <Message color={color} className={error}>{message}</Message>
+               <Form size='large' onSubmit={login
                ? (params) => {this.handleSubmit('/login')}
                : (params) => {this.handleSubmit('/register')}}>
                   <Form.Group widths='equal'>
@@ -106,7 +115,7 @@ export default class LoginModal extends Component{
                            type='text'
                            placeholder='Type email' 
                            name='email'
-                           value={this.state.email} 
+                           value={email} 
                            onChange={this.handleChange}
                         />
                      </Form.Field>
@@ -116,14 +125,18 @@ export default class LoginModal extends Component{
                            autoComplete='off'
                            placeholder='Type password' 
                            name='pass'
-                           value={this.state.pass}
+                           value={pass}
                            onChange={this.handleChange}
                         />
                      </Form.Field>
                   </Form.Group>
                   <div style={{display:'flex', justifyContent: 'space-between'}}>
                      <Button size='large' type='submit'>Submit?</Button>
-                     <Button size='large' type='button' onClick={this.handleToggle}>{!this.state.login?'Login':'Register?'}</Button>
+                     <Button 
+                        size='large' 
+                        type='button' 
+                        onClick={this.handleToggle}
+                     >{!login?'Login':'Register?'}</Button>
                   </div>
                </Form>
             </Segment>

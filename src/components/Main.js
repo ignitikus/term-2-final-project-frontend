@@ -7,7 +7,7 @@ import QuestionModal from './QuestionModal'
 import axiosConfig from './utils/configs/axiosConfig'
 import {returnCurrentPic, getUserFromLS} from './utils/helpers/helperFunctions'
 
-import './Main.css'
+import './utils/styles/Main.css'
 
 export default class Main extends Component{
    constructor(props) {
@@ -29,6 +29,7 @@ export default class Main extends Component{
       axios.post('/savepicture', {...currentPicture, token: getUserFromLS().token}, axiosConfig).then(({data}) => {
          if(data.message === 'jwt expired'){
             console.log('Session expired')
+            this.props.getGalleryNumber()
             this.stateReset()
             this.props.handleSignOut()
          }else{
