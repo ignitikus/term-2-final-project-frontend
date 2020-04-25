@@ -24,13 +24,16 @@ export default class App extends Component {
          gallery:[],
          email: '',
          numGalleryItems: 0,
+         momentFormat: 'LTS'
       }
    }
 
    handleLoginClick = () => this.setState({openLoginForm: true})
    handleLoginClose = () => this.setState({openLoginForm: false})
+   handleTimeClick = () => this.setState({momentFormat: this.state.momentFormat ==='LTS'? 'dddd' : 'LTS' })
    getGalleryNumber = () => this.setState({numGalleryItems: this.state.numGalleryItems+1})
    changeGamePic = (urls) => this.setState({activeItem: 'game', gamePicture: urls})
+   
 
    handleItemClick = (e, { name }) => {
       addToLocalStorage('activeItem', name)
@@ -107,15 +110,15 @@ export default class App extends Component {
       }
    };
 
+
    componentDidMount(){
       this.getActiveTab()
       this.getEmail()
       this.getRandomPic()
    }
 
-
    render() {
-      const { logged, activeItem, data, picture, email, numGalleryItems, openLoginForm, gamePicture } = this.state
+      const { logged, activeItem, data, picture, email, numGalleryItems, openLoginForm, gamePicture, momentFormat } = this.state
       return (
          <div>
             <Menu 
@@ -123,13 +126,16 @@ export default class App extends Component {
                attached='top' 
                style={{justifyContent:'center'}}>
             <Moment 
-               format={'hh:mm:ss'} 
+               format={momentFormat} 
                interval={1000} 
                style={{
                   position: 'absolute', 
                   left:'0', 
                   padding:'.92857143em 1.42857143em', 
-                  height:''}}/>
+                  height:'',
+                  cursor: 'pointer'}}
+               onClick={this.handleTimeClick}   
+               />
             <div 
                style={{
                   position: 'absolute', 
