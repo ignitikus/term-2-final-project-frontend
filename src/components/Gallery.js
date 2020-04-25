@@ -67,6 +67,18 @@ export default class Gallery extends Component{
       this.setState({liked: filteredLiked, disliked: filteredDisliked, open:false})
    }
 
+   imageStyle = (status) => {
+      if(this.state[status].length===1){
+         return {width:'300px', height:'300px'}
+      }
+      if(this.state[status].length===2){
+         return {width:'250px', height:'250px'}
+      }
+      if(this.state[status].length===3 || this.state[status].length===4){
+         return {width:'200px', height:'200px'}
+      }
+   }
+
    componentDidMount(){
       this.getGallery()
       this.props.resetGalleryNumber()
@@ -103,6 +115,7 @@ export default class Gallery extends Component{
                      return (
                         <div key={_id}>
                            <Image 
+                              style={this.imageStyle('liked')}
                               className='galleryImage' src={urls.thumb} 
                               onClick={() => this.handleOpen(_id, status, 'unlike', urls, description)} 
                            />
@@ -122,6 +135,7 @@ export default class Gallery extends Component{
                      return (
                         <div key={_id}>
                            <Image 
+                              style={this.imageStyle('disliked')}
                               className='galleryImage' src={urls.thumb}
                               onClick={() =>this.handleOpen(_id, status, 'undislike', urls, description)}
                            />
@@ -145,12 +159,9 @@ export default class Gallery extends Component{
                icon1={!currentPicture.status ? 'thumbs up outline' : 'thumbs down outline'}
                icon2={'trash alternate outline'}
                icon3={'gamepad'}
-               handleOpen={this.handleOpen} 
-               handleClose={this.handleClose}
                handleOption1 = {() => this.handleSelect(currentPicture.id, currentPicture.action)}
                handleOption2 = {() => this.handleDelete(currentPicture.id)}
                handleOption3 = {() => this.props.changeGamePic(currentPicture.urls)}
-               
             />
          </Segment>
       )

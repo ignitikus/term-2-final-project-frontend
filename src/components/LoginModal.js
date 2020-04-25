@@ -85,8 +85,8 @@ export default class LoginModal extends Component{
                
                <Header size='huge'>{login?'Login':'Register'}</Header>
                <Form size='large' onSubmit={login
-               ? (params) => {this.handleSubmit('/login')}
-               : (params) => {this.handleSubmit('/register')}}>
+               ? () => {this.handleSubmit('/login')}
+               : () => {this.handleSubmit('/register')}}>
                   <Form.Group widths='equal'>
                      <Form.Field>
                         <input 

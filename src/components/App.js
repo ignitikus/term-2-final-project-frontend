@@ -16,15 +16,15 @@ export default class App extends Component {
    constructor(){
       super()
       this.state = { 
-         logged: false,
-         openLoginForm: false,
-         activeItem: 'main',
+         email: '',
          picture: '',
          gamePicture: '',
-         gallery:[],
-         email: '',
+         activeItem: 'main',
+         momentFormat: 'LTS',
+         logged: false,
+         openLoginForm: false,
          numGalleryItems: 0,
-         momentFormat: 'LTS'
+         gallery:[],
       }
    }
 
