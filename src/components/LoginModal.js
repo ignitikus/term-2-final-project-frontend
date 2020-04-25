@@ -1,9 +1,10 @@
 import React, {Component} from 'react'
-import { Button, Form, Portal, Segment, Header, Message } from 'semantic-ui-react'
+import { Button, Form, Portal, Segment, Header } from 'semantic-ui-react'
 import axios from 'axios'
 import axiosConfig from './utils/configs/axiosConfig.js'
 import { addToLocalStorage } from './utils/helpers/helperFunctions'
 import './utils/styles/Main.css'
+
 
 
 export default class LoginModal extends Component{
@@ -16,9 +17,6 @@ export default class LoginModal extends Component{
             pass: '',
          },
          login: true,
-         error: 'hide-message',
-         message: 'Test',
-         color: 'red'
       }
    }
 
@@ -27,40 +25,23 @@ export default class LoginModal extends Component{
    handleSubmit = (route) => {
       const user = {...this.state.credentials}
       if(!user.email || !user.email){
-         this.setState({
-               error: 'show-message', 
-               message: 'All inputs must be filled',
-         })
-         setTimeout(() => {
-            this.setState({error: 'hide-message'})
-         }, 2000);
+         this.props.sendToastMessage('error','All inputs must be filled')
       }else{
          axios.post(route, user, axiosConfig).then(({data}) => {
             if(data.message === 'check credentials'){
-               this.setState({
-                  error: 'show-message', 
-                  message: 'Wrong credentials',
-               })
+               this.props.sendToastMessage('error','Wrong credentials')
             }
             if(data.message === 'already exists'){
+               this.props.sendToastMessage('error','User already exists')
                this.setState({
-                  error: 'show-message', 
-                  message: 'User already exists',
                   login: false
                })
             }
             if(data.message === 'User not found'){
-               this.setState({
-                  error: 'show-message', 
-                  message: 'User not found',
-               })
+               this.props.sendToastMessage('error','User not found')
             }
             if(data.message === 'Success'){
-               this.setState({
-                  error: 'show-message', 
-                  message: 'Success!',
-                  color: 'green',
-               })
+               this.props.sendToastMessage('success','Success!')
                setTimeout(() => {
                   addToLocalStorage('user', JSON.stringify({email:data.email, token:data.token, avatar:data.avatar}))
                   this.props.loggedIn(data.message, data.email)
@@ -69,8 +50,6 @@ export default class LoginModal extends Component{
                         email:'',
                         pass:''
                      },
-                     error:'hide-message', 
-                     color:'red',
                      login:true})
                }, 1500);
             }
@@ -86,7 +65,7 @@ export default class LoginModal extends Component{
 
    render(){
       const {handleLoginClose, open} = this.props
-      const {login, color, error, message, email, pass} = this.state
+      const {login, email, pass} = this.state
       return (
          <Portal 
             onClose={handleLoginClose} 
@@ -105,7 +84,6 @@ export default class LoginModal extends Component{
             >
                
                <Header size='huge'>{login?'Login':'Register'}</Header>
-               <Message color={color} className={error}>{message}</Message>
                <Form size='large' onSubmit={login
                ? (params) => {this.handleSubmit('/login')}
                : (params) => {this.handleSubmit('/register')}}>
