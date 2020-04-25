@@ -1,7 +1,7 @@
 import React, { Component } from 'react'
 import axios from 'axios'
 import Moment from 'react-moment'
-import { Menu, Segment, Button, Icon, Dimmer, Label } from 'semantic-ui-react'
+import { Popup, Menu, Segment, Button, Icon, Dimmer, Label } from 'semantic-ui-react'
 import { ToastContainer, toast } from 'react-toastify';
 
 import Main from './Main'
@@ -125,16 +125,21 @@ export default class App extends Component {
                tabular 
                attached='top' 
                style={{justifyContent:'center'}}>
-            <Moment 
-               format={momentFormat} 
-               interval={1000} 
-               style={{
-                  position: 'absolute', 
-                  left:'0', 
-                  padding:'.92857143em 1.42857143em', 
-                  height:'',
-                  cursor: 'pointer'}}
-               onClick={this.handleTimeClick}   
+            <Popup 
+               trigger={
+                  <Moment 
+                     format={momentFormat} 
+                     interval={1000} 
+                     style={{
+                        position: 'absolute', 
+                        left:'0', 
+                        padding:'.92857143em 1.42857143em', 
+                        height:'',
+                        cursor: 'pointer'}}
+                     onClick={this.handleTimeClick}  
+                     />}
+               content="Click on here to switch between time and day of the week"
+               wide='very'
                />
             <div 
                style={{
@@ -166,32 +171,56 @@ export default class App extends Component {
                }
             </div>
             {logged && 
-               <Menu.Item
-                  name='gallery'
-                  content={
-                     <span>Gallery {
-                        numGalleryItems===0
-                        ? ''
-                        : <Label 
-                           circular 
-                           color='red' 
-                           size='mini'>
-                              {numGalleryItems}
-                        </Label>}
-                     </span>}
-                  active={activeItem === 'gallery'}
-                  onClick={this.handleItemClick}
+               <Popup
+                  trigger={
+                     <Menu.Item
+                        name='gallery'
+                        content={
+                           <span>Gallery {
+                              numGalleryItems===0
+                              ? ''
+                              : <Label 
+                                 circular 
+                                 color='red' 
+                                 size='mini'>
+                                    {numGalleryItems}
+                              </Label>}
+                           </span>}
+                        active={activeItem === 'gallery'}
+                        onClick={this.handleItemClick}
+                     />}
+                  content='pictures you liked/disliked'
+                  wide='very'
+                  position='bottom center'
+                  mouseEnterDelay={500}
+                  mouseLeaveDelay={200}
                />}
-               <Menu.Item
-                  name='main'
-                  active={activeItem === 'main'}
-                  onClick={this.handleItemClick}
+               <Popup
+                  trigger={
+                     <Menu.Item
+                        name='main'
+                        active={activeItem === 'main'}
+                        onClick={this.handleItemClick}
+                     />}
+                  content='click on the picture to get more options'
+                  wide='very'
+                  position='bottom center'
+                  mouseEnterDelay={500}
+                  mouseLeaveDelay={200}
                />
                {logged && 
-               <Menu.Item
-                  name='game'
-                  active={activeItem === 'game'}
-                  onClick={this.handleItemClick}
+               <Popup
+                  trigger={
+                     <Menu.Item
+                        name='game'
+                        active={activeItem === 'game'}
+                        onClick={this.handleItemClick}
+                     />}
+                  content='simple swap tile puzzle'
+                  wide='very'
+                  position='bottom center'
+                  mouseEnterDelay={500}
+                  mouseLeaveDelay={200}
                />}
             </Menu>
 
