@@ -39,7 +39,7 @@ export default class Gallery extends Component{
 
    updateStatus = (id, status)=>{
       this.getGallery()
-      axios.put('/updatestatus', {id ,status}, axiosConfig)
+      axios.put('/updatestatus', {id ,status, token: getUserFromLS().token}, axiosConfig)
    }
 
    handleSelect = (id, action) => {
@@ -61,7 +61,7 @@ export default class Gallery extends Component{
    }
 
    handleDelete = (id) => {
-      axios.delete('/deletepicture/'+id)
+      axios.delete(`/deletepicture/${getUserFromLS().token}/${id}`)
       const filteredLiked = [...this.state.liked].filter(pic=>pic._id !== id)
       const filteredDisliked = [...this.state.disliked].filter(pic=>pic._id !== id)
       this.setState({liked: filteredLiked, disliked: filteredDisliked, open:false})

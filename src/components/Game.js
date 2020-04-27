@@ -15,6 +15,7 @@ export default class Nav extends Component{
    handleGameFinish = () => this.setState({finished: true, open: true})
    
    render(){
+      const {height} = this.props
       const {open, finished} = this.state
       return (
          <div style={{
@@ -31,7 +32,7 @@ export default class Nav extends Component{
             <Segment disabled={open}>
                <Puzzle
                      onDone={this.handleGameFinish}
-                     size = { 650 }
+                     size = { height*85/100 }
                      level = { 3 }
                      image={this.props.gamePicture.full}
                   />

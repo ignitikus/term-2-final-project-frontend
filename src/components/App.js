@@ -8,6 +8,7 @@ import Main from './Main'
 import Game from './Game'
 import Footer  from './Footer'
 import Gallery from './Gallery'
+import Photobooth from './Photobooth'
 import LoginModal  from './LoginModal'
 import { addToLocalStorage } from './utils/helpers/helperFunctions'
 import 'react-toastify/dist/ReactToastify.min.css';
@@ -25,6 +26,8 @@ export default class App extends Component {
          openLoginForm: false,
          numGalleryItems: 0,
          gallery:[],
+         windowHeight: '',
+         windowWidth: '',
       }
    }
 
@@ -112,13 +115,25 @@ export default class App extends Component {
 
 
    componentDidMount(){
+      this.setState({height: window.innerHeight, width: window.innerWidth})
       this.getActiveTab()
       this.getEmail()
       this.getRandomPic()
    }
 
    render() {
-      const { logged, activeItem, data, picture, email, numGalleryItems, openLoginForm, gamePicture, momentFormat } = this.state
+      const { 
+         logged, 
+         activeItem, 
+         data, 
+         picture, 
+         email, 
+         numGalleryItems, 
+         openLoginForm, 
+         gamePicture, 
+         momentFormat,
+         height,
+         width} = this.state
       return (
          <div>
             <Menu 
@@ -170,6 +185,20 @@ export default class App extends Component {
                </Button>
                }
             </div>
+            {logged && 
+               <Popup
+                  trigger={
+                     <Menu.Item
+                        name='photobooth'
+                        active={activeItem === 'photobooth'}
+                        onClick={this.handleItemClick}
+                     />}
+                  content='click on video to take picture'
+                  wide='very'
+                  position='bottom center'
+                  mouseEnterDelay={500}
+                  mouseLeaveDelay={200}
+            />}
             {logged && 
                <Popup
                   trigger={
@@ -240,6 +269,14 @@ export default class App extends Component {
                   changeGamePic={this.changeGamePic} 
                   resetGalleryNumber={this.resetGalleryNumber}/>
                   :null}
+               {activeItem === "photobooth"
+                  ?<Photobooth 
+                     height={height}
+                     width={width}
+                     changeGamePic={this.changeGamePic}
+                     getGalleryNumber={this.getGalleryNumber}
+                  />
+                  :null}
             </Dimmer.Dimmable>
                {activeItem === "main"
                   ?<Main 
@@ -252,6 +289,7 @@ export default class App extends Component {
                   />:null}
                {activeItem === "game"
                   ?<Game 
+                  height={height}
                   gamePicture={gamePicture}
                />:null}
             </Segment>
