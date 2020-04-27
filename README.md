@@ -1,68 +1,57 @@
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+# Term 2 Final Project @CodeImmersives
 
-## Available Scripts
+## Got questions? Send me an email: <a href="mailto:nikolay.kim@codeimmersives.com?Subject=Hello" target="_top">Send Mail</a>
 
-In the project directory, you can run:
+<hr>
 
-### `npm start`
+[Unsplash API](https://unsplash.com/developers) - used to get random pictures
 
-Runs the app in the development mode.<br />
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+## This project consists of 2 parts:
+1. [Backend](https://github.com/ignitikus/term-2-final-project-backend) - Node server with Express and MongoDB;
+2. [Frontend](https://github.com/ignitikus/term-2-final-project-frontend) - React and Semantic UI
 
-The page will reload if you make edits.<br />
-You will also see any lint errors in the console.
+Node packages used in this project: 
 
-### `npm test`
+Backend: 
 
-Launches the test runner in the interactive watch mode.<br />
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+1. [jsonwebtoken](https://jwt.io/) - secure communication between frontend and backend
+2. [bcryptjs](https://www.npmjs.com/package/bcryptjs) - password encryption
+3. [cors](https://www.npmjs.com/package/cors) - an Express middleware that can be used to enable [CORS](https://en.wikipedia.org/wiki/Cross-origin_resource_sharing)
+4. [mongoose](https://mongoosejs.com/) -  MongoDB object modeling tool designed to work in an asynchronous environment
+5. [axios](https://www.npmjs.com/package/axios) - Promise based HTTP client for the browser and node.js(alternative to [fetch](https://www.npmjs.com/package/fetch))
 
-### `npm run build`
+Frontend: 
 
-Builds the app for production to the `build` folder.<br />
-It correctly bundles React in production mode and optimizes the build for the best performance.
+1. [react-moment](https://www.npmjs.com/package/react-moment) - React component for the [moment](https://momentjs.com/) date library. Parse, validate, manipulate, and display dates and times in JavaScript
+2. [react-confetti](https://www.npmjs.com/package/react-confetti) - Confetti without the cleanup
+3. [react-image-puzzle](https://www.npmjs.com/package/react-image-puzzle) - React component for simple swap tile puzzle out of an image
+4. [react-toastify](https://www.npmjs.com/package/react-toastify) - React-Toastify allow you to add notification to your app with ease
+5. [react-webcam](https://www.npmjs.com/package/react-webcam) - Webcam component for React
+6. [semantic-ui-react](https://react.semantic-ui.com/) - React version of Semantic UI framework
 
-The build is minified and the filenames include the hashes.<br />
-Your app is ready to be deployed!
+Available routes: \
+<span style="color:orange">Token generated whenever user logins or registers. By default token doesn't have expiration date</span>
+   * GET
+      * `/randompic` - returns JSON of random picture from Unsplash API (Access key is required to use this API)
+      * `/gallery/:token` - returns JSON with pictures from MongoDB for registered user. Token is used for validation on backend
+   * POST
+      * `/savepicture` - saves picture in DB and returns that picture JSON
+      * `/savephoto` - saves photo from Photobooth component
+      * `/login` - handles login and returns JSON Web Token and stores it in `localstorage` of the browser
+      * `/register` - creates user in DB, returns JSON Web Token and stores it in `localstorage` of the browser
+   * PUT
+      * `/updatestatus` - changes status of a picture in DB
+   * DELETE 
+      * `/deletepicture/:token/:id` - deletes picture from DB
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/code-splitting
-
-### Analyzing the Bundle Size
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size
-
-### Making a Progressive Web App
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app
-
-### Advanced Configuration
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/advanced-configuration
-
-### Deployment
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/deployment
-
-### `npm run build` fails to minify
-
-This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
+      
+## How to make it work locally:
+   1. Fork and clone both repos
+   2. Install all dependencies (type `npm install` in respective directories)
+   3. Create `.env` file in the root of backend folder
+      * `.env` file holds all values that you want to hide from the user. 
+      * Populate file with following: 
+         >JWT_SECRET = 'any string' <br>
+         >MONGODB_URI = 'path to your MongoDB storage' <br>
+         >ACCESS_KEY = 'Access key from Unsplash'
+   4. Now start both servers by typing `npm start` in both backend and frontend
