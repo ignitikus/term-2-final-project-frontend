@@ -30,9 +30,9 @@ Frontend:
 6. [semantic-ui-react](https://react.semantic-ui.com/) - React version of Semantic UI framework
 
 Available routes: \
-<div class="text-orange-light mb-2">
-Token generated whenever user logins or registers. By default token doesn't have expiration date
-</div>
+```diff
+!Token generated whenever user logins or registers. By default token doesn't have expiration date
+```
    * GET
       * `/randompic` - returns JSON of random picture from Unsplash API (Access key is required to use this API)
       * `/gallery/:token` - returns JSON with pictures from MongoDB for registered user. Token is used for validation on backend
