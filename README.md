@@ -30,7 +30,9 @@ Frontend:
 6. [semantic-ui-react](https://react.semantic-ui.com/) - React version of Semantic UI framework
 
 Available routes: \
-<span style="color:orange">Token generated whenever user logins or registers. By default token doesn't have expiration date</span>
+<div class="text-orange-light mb-2">
+Token generated whenever user logins or registers. By default token doesn't have expiration date
+</div>
    * GET
       * `/randompic` - returns JSON of random picture from Unsplash API (Access key is required to use this API)
       * `/gallery/:token` - returns JSON with pictures from MongoDB for registered user. Token is used for validation on backend
@@ -44,7 +46,7 @@ Available routes: \
    * DELETE 
       * `/deletepicture/:token/:id` - deletes picture from DB
 
-      
+   
 ## How to make it work locally:
    1. Fork and clone both repos
    2. Install all dependencies (type `npm install` in respective directories)
